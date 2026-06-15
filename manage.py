@@ -3,6 +3,20 @@
 import os
 import sys
 
+# --- WINDOWS GLOBAL ONNX/CHROMADB CRASH BYPASS ---
+# We create a fake onnxruntime module in sys.modules before anything else imports it.
+# This completely intercepts ChromaDB's internal installation checks.
+class FakeORTModule:
+    class InferenceSession:
+        def __init__(self, *args, **kwargs): pass
+    @staticmethod
+    def get_device(): return "CPU"
+
+sys.modules["onnxruntime"] = FakeORTModule
+
+# Clean root module resolution pathing for Windows envs
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# -------------------------------------------------
 
 def main():
     """Run administrative tasks."""

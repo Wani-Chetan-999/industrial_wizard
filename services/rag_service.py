@@ -10,12 +10,15 @@ class RagKnowledgeEngine:
         self.db_dir = os.getenv("CHROMA_DB_DIR", "./chroma_db")
         self.chroma_client = chromadb.PersistentClient(path=self.db_dir)
         self.embedding_engine = EmbeddingEngine()
-        # Initialize or fetch collection
-        self.collection = self.chroma_client.get_or_create_collection(name="steel_plant_sops")
+        
+        # Explicitly pass a baseline dummy function since we handle token mapping manually
+        self.collection = self.chroma_client.get_or_create_collection(
+            name="steel_plant_sops",
+            embedding_function=lambda x: [[]]  
+        )
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=700, chunk_overlap=100)
 
     def process_and_index_pdf(self, file_path: str, document_id: str):
-        """Extracts text from PDF, splits into semantic chunks, and builds vector index."""
         doc = fitz.open(file_path)
         full_text = ""
         for page in doc:
@@ -33,11 +36,9 @@ class RagKnowledgeEngine:
             )
 
     def query_knowledge_base(self, query_text: str, n_results: int = 3) -> list:
-        """Finds closest semantic matching manual chunks."""
         query_embedding = self.embedding_engine.embed_text(query_text)
         results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=n_results
         )
-        # Flatten documents list output
         return results['documents'][0] if results['documents'] else []

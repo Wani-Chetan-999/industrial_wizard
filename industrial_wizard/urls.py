@@ -6,6 +6,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('rag/', include('rag_engine.urls')),
     path('chatbot/', include('chatbot.urls')),
-    path('predictive/', include('predictive.urls')), # Mounted ML Analytics Suite
+    path('predictive/', include('predictive.urls')),
+    path('reports/', include('reports.urls')), # Mounted Reports App
     path('', include('dashboard.urls')),
 ]

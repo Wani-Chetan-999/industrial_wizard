@@ -12,3 +12,4 @@ numpy==1.26.4
 chartjs-django==0.1
 python-dotenv==1.0.1
 daphne==4.1.0
+onnxruntime==1.17.1
