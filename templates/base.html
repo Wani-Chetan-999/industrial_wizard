@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronEye AI // Industrial Maintenance Wizard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .scada-navbar {
+            background-color: #161b22;
+            border-bottom: 2px solid #21262d;
+            height: 60px;
+        }
+        /* Flexbox wrapper to cleanly isolate sidebar from the active operational viewport */
+        .app-container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+        .sidebar {
+            width: 260px;
+            background-color: #161b22;
+            border-right: 2px solid #21262d;
+            padding: 20px 0;
+            flex-shrink: 0;
+        }
+        .sidebar .nav-link {
+            color: #8b949e;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar .nav-link i {
+            font-size: 1.25rem;
+        }
+        .sidebar .nav-link:hover {
+            color: #ffffff;
+            background-color: #21262d;
+        }
+        .sidebar .nav-link.active {
+            color: #ffffff;
+            background-color: #21262d;
+            border-left: 4px solid #ffc107;
+        }
+        .main-viewport {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: #0d1117;
+            overflow-y: auto;
+        }
+        .card-scada {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark scada-navbar px-4 d-flex align-items-center justify-content-between">
+        <span class="navbar-brand fw-bold text-warning m-0">
+            <i class="bi bi-cpu-fill me-2"></i>IRONEYE AI // MAINTENANCE OPERATIONS
+        </span>
+        <div class="d-flex align-items-center">
+            <span class="badge bg-outline-danger border border-danger text-danger me-3 px-2 py-1">
+                <i class="bi bi-broadcast me-1"></i> LIVE MATRIX ACTIVE
+            </span>
+            <span class="text-white small fw-semibold">
+                <i class="bi bi-person-circle me-1"></i> {{ request.user.username|default:"Operator" }}
+            </span>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <nav class="nav flex-column">
+                <a href="/dashboard/" class="nav-link {% if 'dashboard' in request.path or request.path == '/' %}active{% endif %}">
+                    <i class="bi bi-speedometer2 me-3"></i>SCADA Matrix
+                </a>
+                <a href="/chatbot/" class="nav-link {% if 'chatbot' in request.path %}active{% endif %}">
+                    <i class="bi bi-robot me-3"></i>AI Troubleshooting
+                </a>
+                <a href="/rag/" class="nav-link {% if 'rag' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-medical me-3"></i>Knowledge Ingestion
+                </a>
+                <a href="/predictive/" class="nav-link {% if 'predictive' in request.path %}active{% endif %}">
+                    <i class="bi bi-shield-shaded me-3"></i>ML Diagnostics
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-viewport">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2 class="fw-bold text-white"><i class="bi bi-shield-shaded text-warning me-2"></i>Predictive Maintenance Analytics Engine</h2>
+        <p class="text-muted">Unsupervised Isolation Forest model mapping anomalies and estimating machine failure probabilities.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for res in results %}
+    <div class="col-md-4">
+        <div class="card card-scada p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
+                <h5 class="fw-bold text-white m-0">{{ res.equipment.name }}</h5>
+                <span class="badge bg-dark border {% if res.metrics.is_anomaly %}border-danger text-danger{% else %}border-success text-success{% endif %}">
+                    {% if res.metrics.is_anomaly %}ANOMALY DETECTED{% else %}NORMAL RUN STATE{% endif %}
+                </span>
+            </div>
+
+            <div class="row g-2 mb-3 text-center">
+                <div class="col-6">
+                    <div class="bg-dark p-2 rounded border border-secondary">
+                        <div class="small text-muted">Temp</div>
+                        <div class="fw-bold text-white">{{ res.sensors.temperature }} °C</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="bg-dark p-2 rounded border border-secondary">
+                        <div class="small text-muted">Vibration</div>
+                        <div class="fw-bold text-warning">{{ res.sensors.vibration }} mm/s</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2">
+                <div class="d-flex justify-content-between mb-1 small text-muted">
+                    <span>Failure Probability Risk Matrix</span>
+                    <span class="fw-bold text-danger">{% widthratio res.metrics.failure_probability 1 100 %}%</span>
+                </div>
+                <div class="progress mb-3" style="height: 8px; background-color: #21262d;">
+                    <div class="progress-bar bg-danger" style="width: {% widthratio res.metrics.failure_probability 1 100 %}%"></div>
+                </div>
+
+                <div class="d-flex justify-content-between small text-muted">
+                    <span>Model Decision Function Score:</span>
+                    <span class="font-monospace text-white">{{ res.metrics.anomaly_score }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

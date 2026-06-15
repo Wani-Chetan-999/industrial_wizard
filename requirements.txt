@@ -1,0 +1,14 @@
+django==5.0.3
+channels==4.1.0
+channels-redis==4.2.0
+groq==0.5.0
+langchain==0.1.12
+chromadb==0.4.24
+sentence-transformers==2.5.1
+pymupdf==1.23.26
+scikit-learn==1.4.1.post1
+pandas==2.2.1
+numpy==1.26.4
+chartjs-django==0.1
+python-dotenv==1.0.1
+daphne==4.1.0
